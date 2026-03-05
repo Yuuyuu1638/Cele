@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celestials | Premium Game Recharge</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-dark: #050510;
+            --bg-card: rgba(20, 20, 40, 0.6);
+            --primary: #00d4ff;
+            --secondary: #7000ff;
+            --text-main: #ffffff;
+            --text-muted: #a0a0b0;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-main);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(112, 0, 255, 0.1) 0%, transparent 20%);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- UTILITIES --- */
+        .glass {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.5);
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--primary), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .menu-btn {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-main);
+            transition: var(--transition);
+            z-index: 1001;
+        }
+
+        .menu-btn:hover {
+            color: var(--primary);
+        }
+
+        /* --- SIDEBAR MENU --- */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background: rgba(10, 10, 20, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 80px 30px;
+            transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            border-left: 1px solid var(--glass-border);
+            box-shadow: -5px 0 30px rgba(0,0,0,0.5);
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+
+        .sidebar a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 900;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 0;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* --- GAME STORE GRID --- */
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+
+        .game-card {
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .game-card img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+        }
+
+        .game-card h3 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .game-card .price {
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+
+        /* --- PREDICTOR SECTION --- */
+        .predictor-section {
+            margin-bottom: 60px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .predictor-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .form-input {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--glass-border);
+            padding: 12px;
+            border-radius: 8px;
+            color: white;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- LEADERBOARD --- */
+        .leaderboard-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .leaderboard-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .rank-1 { border-left: 4px solid gold; }
+        .rank-2 { border-left: 4px solid silver; }
+        .rank-3 { border-left: 4px solid #cd7f32; }
+
+        /* --- EVENTS CAROUSEL --- */
+        .events-container {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            scrollbar-width: none;
+        }
+        
+        .events-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .event-card {
+            min-width: 280px;
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .event-card img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .event-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .event-info {
+            position: relative;
+            z-index: 2;
+            padding: 15px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            width: 100%;
+        }
+
+        /* --- RECHARGE MODAL --- */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: #111;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid var(--primary);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .diamond-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .diamond-option {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .diamond-option:hover, .diamond-option.selected {
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .predictor-form { grid-template-columns: 1fr; }
+            .game-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Overlay for Sidebar -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="#leaderboard"><i class="fas fa-trophy"></i> Leaderboard</a></li>
+            <li><a href="#events"><i class="fas fa-calendar-alt"></i> Latest Events</a></li>
+            <li><a href="#predictor"><i class="fas fa-magic"></i> Rank Predictor</a></li>
+            <li><a href="#settings"><i class="fas fa-cog"></i> Settings</a></li>
+            <li><a href="#" onclick="alert('Logged out!')"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <div class="logo">CELESTIALS</div>
+            <div class="menu-btn" id="menuBtn">
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
+        </nav>
+
+        <!-- Hero -->
+        <section class="hero">
+            <h1>Level Up Your Game</h1>
+            <p>Instant Recharge for Mobile Legends & More</p>
+        </section>
+
+        <!-- Recharge Store -->
+        <section>
+            <h2 class="section-title">Select Game</h2>
+            <div class="game-grid">
+                <!-- MLBB -->
+                <div class="game-card glass" onclick="openRecharge('Mobile Legends: Bang Bang', 'https://upload.wikimedia.org/wikipedia/en/2/23/Mobile_Legends_Bang_Bang_logo.png')">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/2/23/Mobile_Legends_Bang_Bang_logo.png" alt="MLBB">
+                    <h3>Mobile Legends</h3>
+                    <div class="price">Starts @ ₹49</div>
+                </div>
+                <!-- PUBG -->
+                <div class="game-card glass" onclick="openRecharge('PUBG Mobile', 'https://upload.wikimedia.org/wikipedia/en/3/3e/PUBG_Mobile_logo.png')">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/3/3e/PUBG_Mobile_logo.png" alt="PUBG">
+                    <h3>PUBG Mobile</h3>
+                    <div class="price">Starts @ ₹49</div>
+                </div>
+                <!-- Free Fire -->
+                <div class="game-card glass" onclick="openRecharge('Free Fire', 'https://upload.wikimedia.org/wikipedia/en/2/22/Free_Fire_logo.png')">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/2/22/Free_Fire_logo.png" alt="FF">
+                    <h3>Free Fire</h3>
+                    <div class="price">Starts @ ₹29</div>
+                </div>
+                <!-- Genshin -->
+                <div class="game-card glass" onclick="openRecharge('Genshin Impact', 'https://upload.wikimedia.org/wikipedia/en/3/31/Genshin_Impact_logo.png')">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/3/31/Genshin_Impact_logo.png" alt="Genshin">
+                    <h3>Genshin Impact</h3>
+                    <div class="price">Starts
